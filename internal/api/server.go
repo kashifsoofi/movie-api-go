@@ -10,19 +10,23 @@ import (
 
 	"github.com/go-chi/chi/v5"
 	"github.com/kashifsoofi/movie-api/internal/config"
+	"github.com/kashifsoofi/movie-api/internal/store"
 )
 
 type Server struct {
 	cfg    config.HTTPServer
+	store  store.Store
 	router *chi.Mux
 }
 
-func NewServer(cfg config.HTTPServer) *Server {
-	router := chi.NewRouter()
+func NewServer(cfg config.HTTPServer, store store.Store) *Server {
 	srv := &Server{
 		cfg:    cfg,
-		router: router,
+		store:  store,
+		router: chi.NewRouter(),
 	}
+
+	srv.routes()
 
 	return srv
 }

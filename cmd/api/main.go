@@ -5,6 +5,7 @@ import (
 	"os"
 
 	"github.com/kashifsoofi/movie-api/internal/api"
+	"github.com/kashifsoofi/movie-api/internal/store/memory"
 )
 
 func newServer() (*api.Server, error) {
@@ -13,8 +14,8 @@ func newServer() (*api.Server, error) {
 		return nil, err
 	}
 
-	server := api.NewServer(apiConfig.HTTPServer)
-	server.GetRouter()
+	store := memory.NewMemoryStore()
+	server := api.NewServer(apiConfig.HTTPServer, store)
 	return server, nil
 }
 
