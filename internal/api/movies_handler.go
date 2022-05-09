@@ -18,7 +18,7 @@ type movieResponse struct {
 	TicketPrice float64   `json:"ticket_price"`
 }
 
-func NewMovieResponse(m store.Movie) movieResponse {
+func NewMovieResponse(m *store.Movie) movieResponse {
 	return movieResponse{
 		ID:          m.ID,
 		Title:       m.Title,
@@ -32,7 +32,7 @@ func (hr movieResponse) Render(w http.ResponseWriter, r *http.Request) error {
 	return nil
 }
 
-func NewMovieListResponse(movies []store.Movie) []render.Renderer {
+func NewMovieListResponse(movies []*store.Movie) []render.Renderer {
 	list := []render.Renderer{}
 	for _, movie := range movies {
 		mr := NewMovieResponse(movie)
@@ -43,7 +43,7 @@ func NewMovieListResponse(movies []store.Movie) []render.Renderer {
 
 func (s *Server) handleListMovies() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		movies, _ := s.store.Movies().GetAll()
+		movies, _ := s.store.Movies().GetAll(r.Context())
 		render.RenderList(w, r, NewMovieListResponse(movies))
 	}
 }
@@ -58,7 +58,7 @@ func (s *Server) handleGetMovie() http.HandlerFunc {
 			return
 		}
 
-		movie, err := s.store.Movies().GetByID(id)
+		movie, err := s.store.Movies().GetByID(r.Context(), id)
 		if err != nil {
 			render.Render(w, r, ErrNotFound)
 			return
@@ -88,16 +88,13 @@ func (s *Server) handleCreateMovie() http.HandlerFunc {
 			return
 		}
 
-		movie := store.Movie{
-			ID:          uuid.New(),
+		movie := &store.Movie{
 			Title:       data.Title,
 			Director:    data.Director,
 			ReleaseDate: data.ReleaseDate,
 			TicketPrice: data.TicketPrice,
-			CreatedAt:   time.Now().UTC(),
-			UpdatedAt:   time.Now().UTC(),
 		}
-		s.store.Movies().Create(movie)
+		s.store.Movies().Create(r.Context(), movie)
 
 		mr := NewMovieResponse(movie)
 		render.Render(w, r, mr)
@@ -114,7 +111,7 @@ func (s *Server) handleDeleteMovie() http.HandlerFunc {
 			return
 		}
 
-		movie, err := s.store.Movies().Delete(id)
+		movie, err := s.store.Movies().Delete(r.Context(), id)
 		if err != nil {
 			render.Render(w, r, ErrNotFound)
 			return

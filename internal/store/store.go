@@ -1,13 +1,14 @@
 package store
 
 import (
+	"context"
 	"time"
 
 	"github.com/google/uuid"
 )
 
 type Store interface {
-	Movies() MoviesStore
+	Movies() MovieStore
 }
 
 type Movie struct {
@@ -20,9 +21,9 @@ type Movie struct {
 	UpdatedAt   time.Time
 }
 
-type MoviesStore interface {
-	GetAll() ([]Movie, error)
-	GetByID(uuid.UUID) (Movie, error)
-	Create(Movie)
-	Delete(uuid.UUID) (Movie, error)
+type MovieStore interface {
+	GetAll(context.Context) ([]*Movie, error)
+	GetByID(context.Context, uuid.UUID) (*Movie, error)
+	Create(context.Context, *Movie) (*Movie, error)
+	Delete(context.Context, uuid.UUID) (*Movie, error)
 }
