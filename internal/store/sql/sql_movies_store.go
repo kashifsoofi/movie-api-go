@@ -39,10 +39,10 @@ func (s SQLMovieStore) GetByID(ctx context.Context, ID uuid.UUID) (*store.Movie,
 		`SELECT
 			id, title, director, release_date, ticket_price, created_at, updated_at
 		FROM movies
-		WHERE id = ?`,
+		WHERE id = $1`,
 		ID); err != nil {
 		if err != sql.ErrNoRows {
-
+			return nil, fmt.Errorf("could not get movie, err: %w", err)
 		}
 
 		return nil, errors.New("not found")
@@ -72,10 +72,10 @@ func (s SQLMovieStore) Delete(ctx context.Context, ID uuid.UUID) (*store.Movie, 
 		return nil, err
 	}
 
-	if _, err := s.dbx.NamedExecContext(
+	if _, err := s.dbx.ExecContext(
 		ctx,
 		`DELETE FROM movies
-		WHERE id = :id`, ID); err != nil {
+		WHERE id = $1`, ID); err != nil {
 		return nil, fmt.Errorf("count not delete movie, err: %w", err)
 	}
 

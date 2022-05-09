@@ -21,6 +21,7 @@ type HTTPServer struct {
 	Port         int           `envconfig:"PORT" default:"8080"`
 	ReadTimeout  time.Duration `envconfig:"HTTP_SERVER_READ_TIMEOUT" default:"1s"`
 	WriteTimeout time.Duration `envconfig:"HTTP_SERVER_WRITE_TIMEOUT" default:"2s"`
+	Store        string        `envconfig:"STORE" default:"memory"`
 }
 
 func Load(cfg Configuration) error {
