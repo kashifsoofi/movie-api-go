@@ -11,7 +11,7 @@ const envPrefix = ""
 type Configuration interface{}
 
 type Database struct {
-	URL                string `envconfig:"DATABASE_URL" default:"dummy"`
+	DatabaseURL        string `envconfig:"DATABASE_URL" required:"true"`
 	LogLevel           string `envconfig:"DATABASE_LOG_LEVEL" default:"warn"`
 	MaxOpenConnections int    `envconfig:"DATABASE_MAX_OPEN_CONNECTIONS" default:"10"`
 }

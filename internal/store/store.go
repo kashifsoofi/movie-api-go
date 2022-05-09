@@ -15,10 +15,10 @@ type Movie struct {
 	ID          uuid.UUID
 	Title       string
 	Director    string
-	ReleaseDate time.Time
-	TicketPrice float64
-	CreatedAt   time.Time
-	UpdatedAt   time.Time
+	ReleaseDate time.Time `db:"release_date"`
+	TicketPrice float64   `db:"ticket_price"`
+	CreatedAt   time.Time `db:"created_at"`
+	UpdatedAt   time.Time `db:"updated_at"`
 }
 
 type MovieStore interface {

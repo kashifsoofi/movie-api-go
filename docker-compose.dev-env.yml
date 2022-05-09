@@ -20,7 +20,7 @@ services:
       context: ./db/
       dockerfile: Dockerfile
     environment:
-      - DATABASE_URL=postgresql://postgres:Password123@movie.db:5432/moviedb
+      - DATABASE_URL=postgresql://postgres:Password123@movie.db:5432/moviedb?sslmode=disable
 
 volumes:
   moviedbdata:

@@ -58,7 +58,7 @@ func (s SQLMovieStore) Create(ctx context.Context, movie *store.Movie) (*store.M
 		`INSERT INTO movies
 			(id, title, director, release_date, ticket_price)
 		VALUES
-			(:id, :title, :director, :relase_date, :ticket_price)`,
+			(:id, :title, :director, :release_date, :ticket_price)`,
 		movie); err != nil {
 		return nil, fmt.Errorf("count not insert movie, err: %w", err)
 	}
