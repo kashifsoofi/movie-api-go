@@ -30,6 +30,9 @@ This not a most acurate representation of how you would model a movie resource i
 | ReleaseDate | Time    |
 | TicketPrice | float64 |
 
+## Test
+There is an [Insomnia Document](https://github.com/kashifsoofi/movie-api-go/blob/main/Insomnia-Document.json) in the repository that can be used to test the api with [Insomnia Rest Client](https://insomnia.rest/).
+
 ## References
 - [Building ASP.NET 5 apps with AngularJS](http://stephenwalther.com/archive/2015/01/12/asp-net-5-and-angularjs-part-1-configuring-grunt-uglify-and-angularjs)
 - [How I write HTTP services after eight years.](https://pace.dev/blog/2018/05/09/how-I-write-http-services-after-eight-years.html)
