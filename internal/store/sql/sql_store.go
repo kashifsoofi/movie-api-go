@@ -1,11 +1,12 @@
 package sql
 
 import (
+	"context"
 	"log"
 
+	_ "github.com/jackc/pgx/v4"
 	"github.com/jmoiron/sqlx"
 	"github.com/kashifsoofi/movie-api/internal/store"
-	_ "github.com/lib/pq"
 )
 
 const driverName = "postgres"
@@ -15,8 +16,8 @@ type SQLStore struct {
 	movies SQLMovieStore
 }
 
-func NewSQLStore(databaseUrl string) store.Store {
-	dbx, err := sqlx.Connect(driverName, databaseUrl)
+func NewSQLStore(ctx context.Context, databaseUrl string) store.Store {
+	dbx, err := sqlx.ConnectContext(ctx, driverName, databaseUrl)
 	if err != nil {
 		log.Fatalln(err)
 	}
