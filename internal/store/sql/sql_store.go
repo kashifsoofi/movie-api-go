@@ -2,28 +2,23 @@ package sql
 
 import (
 	"context"
-	"log"
 
-	_ "github.com/jackc/pgx/v4"
+	_ "github.com/jackc/pgx/stdlib"
 	"github.com/jmoiron/sqlx"
 	"github.com/kashifsoofi/movie-api/internal/store"
 )
 
-const driverName = "postgres"
+const driverName = "pgx"
 
 type SQLStore struct {
-	dbx    *sqlx.DB
-	movies SQLMovieStore
+	databaseUrl string
+	dbx         *sqlx.DB
+	movies      SQLMovieStore
 }
 
-func NewSQLStore(ctx context.Context, databaseUrl string) store.Store {
-	dbx, err := sqlx.ConnectContext(ctx, driverName, databaseUrl)
-	if err != nil {
-		log.Fatalln(err)
-	}
-
+func NewSQLStore(databaseUrl string) store.Store {
 	sqlStore := &SQLStore{
-		dbx: dbx,
+		databaseUrl: databaseUrl,
 	}
 
 	sqlStore.movies = NewSQLMovieStore(sqlStore)
@@ -31,6 +26,20 @@ func NewSQLStore(ctx context.Context, databaseUrl string) store.Store {
 	return sqlStore
 }
 
-func (ms *SQLStore) Movies() store.MovieStore {
-	return ms.movies
+func (s *SQLStore) Connect(ctx context.Context) error {
+	dbx, err := sqlx.ConnectContext(ctx, driverName, s.databaseUrl)
+	if err != nil {
+		return err
+	}
+
+	s.dbx = dbx
+	return nil
+}
+
+func (s *SQLStore) Close() error {
+	return s.dbx.Close()
+}
+
+func (s *SQLStore) Movies() store.MovieStore {
+	return s.movies
 }

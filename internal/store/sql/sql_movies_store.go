@@ -19,6 +19,12 @@ func NewSQLMovieStore(sqlStore *SQLStore) SQLMovieStore {
 }
 
 func (s SQLMovieStore) GetAll(ctx context.Context) ([]*store.Movie, error) {
+	err := s.Connect(ctx)
+	if err != nil {
+		return nil, err
+	}
+	defer s.Close()
+
 	var movies []*store.Movie
 	if err := s.dbx.SelectContext(
 		ctx,
@@ -32,6 +38,12 @@ func (s SQLMovieStore) GetAll(ctx context.Context) ([]*store.Movie, error) {
 }
 
 func (s SQLMovieStore) GetByID(ctx context.Context, ID uuid.UUID) (*store.Movie, error) {
+	err := s.Connect(ctx)
+	if err != nil {
+		return nil, err
+	}
+	defer s.Close()
+
 	var movie store.Movie
 	if err := s.dbx.GetContext(
 		ctx,
@@ -52,6 +64,12 @@ func (s SQLMovieStore) GetByID(ctx context.Context, ID uuid.UUID) (*store.Movie,
 }
 
 func (s SQLMovieStore) Create(ctx context.Context, movie *store.Movie) (*store.Movie, error) {
+	err := s.Connect(ctx)
+	if err != nil {
+		return nil, err
+	}
+	defer s.Close()
+
 	movie.ID = uuid.New()
 	if _, err := s.dbx.NamedExecContext(
 		ctx,
@@ -67,6 +85,12 @@ func (s SQLMovieStore) Create(ctx context.Context, movie *store.Movie) (*store.M
 }
 
 func (s SQLMovieStore) Delete(ctx context.Context, ID uuid.UUID) (*store.Movie, error) {
+	err := s.Connect(ctx)
+	if err != nil {
+		return nil, err
+	}
+	defer s.Close()
+
 	movie, err := s.GetByID(ctx, ID)
 	if err != nil {
 		return nil, err

@@ -8,6 +8,8 @@ import (
 )
 
 type Store interface {
+	Connect(ctx context.Context) error
+	Close() error
 	Movies() MovieStore
 }
 

@@ -17,7 +17,7 @@ func newServer(ctx context.Context) (*api.Server, error) {
 
 	store := memory.NewMemoryStore()
 	if apiConfig.Store == "sql" {
-		store = sql.NewSQLStore(ctx, apiConfig.DatabaseURL)
+		store = sql.NewSQLStore(apiConfig.DatabaseURL)
 	}
 	server := api.NewServer(apiConfig.HTTPServer, store)
 	return server, nil
