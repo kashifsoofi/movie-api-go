@@ -1,19 +1,31 @@
 package memory
 
-import "github.com/kashifsoofi/movie-api/internal/store"
+import (
+	"context"
+
+	"github.com/kashifsoofi/movie-api/internal/store"
+)
 
 type MemoryStore struct {
-	movies store.MoviesStore
+	movies MemMovieStore
 }
 
 func NewMemoryStore() store.Store {
 	memoryStore := &MemoryStore{
-		movies: NewMemMoviesStore(),
+		movies: NewMemMovieStore(),
 	}
 
 	return memoryStore
 }
 
-func (ms *MemoryStore) Movies() store.MoviesStore {
-	return ms.movies
+func (s *MemoryStore) Connect(ctx context.Context) error {
+	return nil
+}
+
+func (s *MemoryStore) Close() error {
+	return nil
+}
+
+func (s *MemoryStore) Movies() store.MovieStore {
+	return s.movies
 }

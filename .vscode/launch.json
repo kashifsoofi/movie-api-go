@@ -11,7 +11,8 @@
             "mode": "auto",
             "program": "${workspaceFolder}/cmd/api/main.go",
             "env": {
-                "DATABASE_URL": "dummy"
+                "STORE": "sql",
+                "DATABASE_URL": "postgresql://postgres:Password123@localhost:5432/moviedb?sslmode=disable"
             }
         }
     ]
