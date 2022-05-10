@@ -10,27 +10,30 @@ import (
 )
 
 type MemMovieStore struct {
-	movies []*store.Movie
+	movies map[uuid.UUID]*store.Movie
 }
 
 func NewMemMovieStore() MemMovieStore {
 	return MemMovieStore{
-		movies: []*store.Movie{},
+		movies: map[uuid.UUID]*store.Movie{},
 	}
 }
 
 func (s MemMovieStore) GetAll(ctx context.Context) ([]*store.Movie, error) {
-	return s.movies, nil
+	movies := make([]*store.Movie, 0, 0)
+	for _, m := range s.movies {
+		movies = append(movies, m)
+	}
+	return movies, nil
 }
 
 func (s MemMovieStore) GetByID(ctx context.Context, ID uuid.UUID) (*store.Movie, error) {
-	for _, m := range s.movies {
-		if m.ID == ID {
-			return m, nil
-		}
+	m, ok := s.movies[ID]
+	if !ok {
+		return nil, errors.New("not found")
 	}
 
-	return nil, errors.New("not found")
+	return m, nil
 }
 
 func (ms MemMovieStore) Create(ctx context.Context, movie *store.Movie) (*store.Movie, error) {
@@ -38,25 +41,16 @@ func (ms MemMovieStore) Create(ctx context.Context, movie *store.Movie) (*store.
 	movie.CreatedAt = time.Now().UTC()
 	movie.UpdatedAt = time.Now().UTC()
 
-	ms.movies = append(ms.movies, movie)
+	ms.movies[movie.ID] = movie
 	return movie, nil
 }
 
 func (s MemMovieStore) Delete(ctx context.Context, ID uuid.UUID) (*store.Movie, error) {
-	index := -1
-	for i, m := range s.movies {
-		if m.ID == ID {
-			index = i
-			break
-		}
-	}
-
-	if index == -1 {
+	m, ok := s.movies[ID]
+	if !ok {
 		return nil, errors.New("not found")
 	}
 
-	movie := s.movies[index]
-	s.movies[index] = s.movies[len(s.movies)-1]
-	s.movies = s.movies[:len(s.movies)-1]
-	return movie, nil
+	delete(s.movies, ID)
+	return m, nil
 }
