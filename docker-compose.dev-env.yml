@@ -19,8 +19,7 @@ services:
     build:
       context: ./db/
       dockerfile: Dockerfile
-    environment:
-      - DATABASE_URL=postgresql://postgres:Password123@movie.db:5432/moviedb?sslmode=disable
+    command: "postgresql://postgres:Password123@movie.db:5432/moviedb?sslmode=disable up"
 
 volumes:
   moviedbdata:

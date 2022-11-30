@@ -1,5 +1,3 @@
--- migrate:up
-
 CREATE TABLE IF NOT EXISTS movies (
     id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
     title VARCHAR(100) NOT NULL,
@@ -9,7 +7,3 @@ CREATE TABLE IF NOT EXISTS movies (
     created_at TIMESTAMP WITHOUT TIME ZONE DEFAULT (now() AT TIME ZONE 'utc') NOT NULL,
     updated_at TIMESTAMP WITHOUT TIME ZONE DEFAULT (now() AT TIME ZONE 'utc') NOT NULL
 )
-
--- migrate:down
-
-DROP TABLE IF EXISTS movies;

@@ -1,8 +1,7 @@
-FROM amacneil/dbmate
-
-WORKDIR /db
+FROM migrate/migrate
 
 # Copy all db files
-COPY . .
+COPY ./migrations /migrations
 
-ENTRYPOINT [ "/usr/local/bin/dbmate", "-d", "./migrations", "--no-dump-schema", "--wait", "up"]
+ENTRYPOINT [ "migrate", "-path", "/migrations", "-database"]
+CMD ["DATABASE_URL up"]
