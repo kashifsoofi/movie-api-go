@@ -7,9 +7,15 @@ This would also demonstrate how to run sql migration scripts using [dbmate](http
 ## Start Development Environment
 Development dependencies can be started with `docker-compose`. This would start up PostgreSQL server and create and run docker image to run database migration on PostgreSQL server.
 ```
-docker-compose -f docker-compose.dev-env.yml
+docker-compose -f docker-compose.dev-env.yml up -d
 ```
 This is only needed if you are going to run api against PostgreSQL. There is an in memory store available in code, that can be used instead of PostgreSQL.
+
+## Run Application
+Use following command to start application from command line
+```
+DATABASE_URL=postgres://postgres:Password123@127.0.0.1:5432/moviedb?sslmode=disable go run cmd/api/main.go
+```
 
 ## API Endpoints
 - GET `/health`

@@ -1,0 +1,2 @@
+-- ALTER TABLE movies
+-- ALTER COLUMN ticket_price SET NOT NULL;
